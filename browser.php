@@ -1,5 +1,4 @@
 <?php
-namespace Simpletest;
 /**
  * Some security control
  */

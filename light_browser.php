@@ -1,19 +1,11 @@
 <?php
-/**
- * Some security control
- */
-if (defined('BROWSER') == false
-        ||  !BROWSER) {
-    print 'Forbidden'; exit;
-}
+
 /**
  *  Base include file for SimpleTest
  *  @package    SimpleTest
  *  @subpackage WebTester
- *  @version    $Id: browser.php 2013 2011-04-29 09:29:45Z pp11 $
  */
-
-/**#@+
+/* * #@+
  *  include other SimpleTest class files
  */
 require_once(dirname(__FILE__) . '/simpletest.php');
@@ -27,9 +19,9 @@ require_once(dirname(__FILE__) . '/frames.php');
 require_once(dirname(__FILE__) . '/user_agent.php');
 require_once(dirname(__FILE__) . '/SimpleBrowserHistory.php');
 
-/**#@-*/
+/* * #@- */
 
-if (! defined('DEFAULT_MAX_NESTED_FRAMES')) {
+if (!defined('DEFAULT_MAX_NESTED_FRAMES')) {
     define('DEFAULT_MAX_NESTED_FRAMES', 3);
 }
 
@@ -38,11 +30,14 @@ if (! defined('DEFAULT_MAX_NESTED_FRAMES')) {
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-class LightBrowser {
+class LightBrowser
+{
+
     /**
      * @var SimpleUserAgent
      */
     private $user_agent;
+
     /**
      * @var SimplePage
      */
@@ -58,12 +53,11 @@ class LightBrowser {
      *    set up if specified in the options.
      *    @access public
      */
-    function __construct() {
+    function __construct()
+    {
         $this->user_agent = $this->createUserAgent();
         $this->user_agent->useProxy(
-                SimpleTest::getDefaultProxy(),
-                SimpleTest::getDefaultProxyUsername(),
-                SimpleTest::getDefaultProxyPassword());
+                SimpleTest::getDefaultProxy(), SimpleTest::getDefaultProxyUsername(), SimpleTest::getDefaultProxyPassword());
         $this->page = new SimplePage();
         $this->history = $this->createHistory();
         $this->ignore_frames = false;
@@ -75,8 +69,9 @@ class LightBrowser {
      *    @return SimpleFetcher    Content fetcher.
      *    @access protected
      */
-    protected function createUserAgent() {
-		$simple = new SimpleUserAgent();
+    protected function createUserAgent()
+    {
+        $simple = new SimpleUserAgent();
         return $simple;
     }
 
@@ -85,7 +80,8 @@ class LightBrowser {
      *    @return SimpleBrowserHistory    New list.
      *    @access protected
      */
-    protected function createHistory() {
+    protected function createHistory()
+    {
         return new SimpleBrowserHistory();
     }
 
@@ -93,7 +89,8 @@ class LightBrowser {
      *    Switches off cookie sending and recieving.
      *    @access public
      */
-    function ignoreCookies() {
+    function ignoreCookies()
+    {
         $this->user_agent->ignoreCookies();
     }
 
@@ -101,10 +98,11 @@ class LightBrowser {
      *    Switches back on the cookie sending and recieving.
      *    @access public
      */
-    function useCookies() {
+    function useCookies()
+    {
         $this->user_agent->useCookies();
     }
-    
+
     /**
      * 
      * @param string/SimpleUrl $url          Target to fetch.
@@ -112,8 +110,9 @@ class LightBrowser {
      * @param integer $depth                 Nested frameset depth protection.
      * @return SimpleHttpResponse
      */
-    public function getResponse($url, $encoding, $depth = 0) {
-        return  $this->user_agent->fetchResponse($url, $encoding);
+    public function getResponse($url, $encoding, $depth = 0)
+    {
+        return $this->user_agent->fetchResponse($url, $encoding);
     }
 
     /**
@@ -125,7 +124,8 @@ class LightBrowser {
      *    @return SimplePage                    Parsed page.
      *    @access private
      */
-    protected function fetch($url, $encoding, $depth = 0) {
+    protected function fetch($url, $encoding, $depth = 0)
+    {
         $response = $this->user_agent->fetchResponse($url, $encoding);
         return new SimplePage($response);
     }
@@ -138,7 +138,8 @@ class LightBrowser {
      *    @return string                          Raw content of page.
      *    @access private
      */
-    protected function load($url, $parameters) {
+    protected function load($url, $parameters)
+    {
         return $this->loadPage($url, $parameters);
     }
 
@@ -149,11 +150,11 @@ class LightBrowser {
      *    @return string                          Raw content of page.
      *    @access private
      */
-    protected function loadPage($url, $parameters) {
+    protected function loadPage($url, $parameters)
+    {
         $this->page = $this->fetch($url, $parameters);
         $this->history->recordEntry(
-                $this->page->getUrl(),
-                $this->page->getRequestData());
+                $this->page->getUrl(), $this->page->getRequestData());
         return $this->page->getRaw();
     }
 
@@ -165,7 +166,8 @@ class LightBrowser {
      *                                  cookies are kept.
      *    @access public
      */
-    function restart($date = false) {
+    function restart($date = false)
+    {
         $this->user_agent->restart($date);
     }
 
@@ -175,7 +177,8 @@ class LightBrowser {
      *                                request until cleared.
      *    @access public
      */
-    function addHeader($header) {
+    function addHeader($header)
+    {
         $this->user_agent->addHeader($header);
     }
 
@@ -183,7 +186,8 @@ class LightBrowser {
      *    Reset headers
      *    @access public
      */
-    function resetAdditionalHeader() {
+    function resetAdditionalHeader()
+    {
         $this->user_agent->resetAdditionalHeader();
     }
 
@@ -192,7 +196,8 @@ class LightBrowser {
      *    @param integer $interval    Amount in seconds.
      *    @access public
      */
-    function ageCookies($interval) {
+    function ageCookies($interval)
+    {
         $this->user_agent->ageCookies($interval);
     }
 
@@ -206,7 +211,8 @@ class LightBrowser {
      *    @param string $expiry     Expiry date.
      *    @access public
      */
-    function setCookie($name, $value, $host = false, $path = '/', $expiry = false) {
+    function setCookie($name, $value, $host = false, $path = '/', $expiry = false)
+    {
         $this->user_agent->setCookie($name, $value, $host, $path, $expiry);
     }
 
@@ -220,7 +226,8 @@ class LightBrowser {
      *                               value as a string.
      *    @access public
      */
-    function getCookieValue($host, $path, $name) {
+    function getCookieValue($host, $path, $name)
+    {
         return $this->user_agent->getCookieValue($host, $path, $name);
     }
 
@@ -231,7 +238,8 @@ class LightBrowser {
      *                          if the cookie is not set.
      *    @access public
      */
-    function getCurrentCookieValue($name) {
+    function getCurrentCookieValue($name)
+    {
         return $this->user_agent->getBaseCookieValue($name, $this->page->getUrl());
     }
 
@@ -241,7 +249,8 @@ class LightBrowser {
      *    @param integer $max        Most hops allowed.
      *    @access public
      */
-    function setMaximumRedirects($max) {
+    function setMaximumRedirects($max)
+    {
         $this->user_agent->setMaximumRedirects($max);
     }
 
@@ -251,7 +260,8 @@ class LightBrowser {
      *    @param integer $max        Highest depth allowed.
      *    @access public
      */
-    function setMaximumNestedFrames($max) {
+    function setMaximumNestedFrames($max)
+    {
         $this->maximum_nested_frames = $max;
     }
 
@@ -260,7 +270,8 @@ class LightBrowser {
      *    @param integer $timeout      Maximum time in seconds.
      *    @access public
      */
-    function setConnectionTimeout($timeout) {
+    function setConnectionTimeout($timeout)
+    {
         $this->user_agent->setConnectionTimeout($timeout);
     }
 
@@ -273,7 +284,8 @@ class LightBrowser {
      *    @param string $password     Proxy password for authentication.
      *    @access public
      */
-    function useProxy($proxy, $username = false, $password = false) {
+    function useProxy($proxy, $username = false, $password = false)
+    {
         $this->user_agent->useProxy($proxy, $username, $password);
     }
 
@@ -286,7 +298,8 @@ class LightBrowser {
      *    @return boolean                             True if successful.
      *    @access public
      */
-    function head($url, $parameters = false) {
+    function head($url, $parameters = false)
+    {
         if (!($url instanceof SimpleUrl)) {
             $url = new SimpleUrl($url);
         }
@@ -295,7 +308,7 @@ class LightBrowser {
         }
         $response = $this->user_agent->fetchResponse($url, new SimpleHeadEncoding($parameters));
         $this->page = new SimplePage($response);
-        return ! $response->isError();
+        return !$response->isError();
     }
 
     /**
@@ -306,8 +319,9 @@ class LightBrowser {
      *    @return string                              Content of page or false.
      *    @access public
      */
-    function get($url, $parameters = false) {
-        if (substr($url,0,5) == 'https' && $this->user_agent->usedProxy() ) {
+    function get($url, $parameters = false)
+    {
+        if (substr($url, 0, 5) == 'https' && $this->user_agent->usedProxy()) {
             throw new Exception('HTTPS doesn\'t work with proxy');
         }
         if (!($url instanceof SimpleUrl)) {
@@ -327,8 +341,9 @@ class LightBrowser {
      *    @return string                              Content of page.
      *    @access public
      */
-    function post($url, $parameters = false, $content_type = false) {
-        if (! is_object($url)) {
+    function post($url, $parameters = false, $content_type = false)
+    {
+        if (!is_object($url)) {
             $url = new SimpleUrl($url);
         }
         if ($this->getUrl()) {
@@ -345,8 +360,9 @@ class LightBrowser {
      *    @return string                              Content of page.
      *    @access public
      */
-    function put($url, $parameters = false, $content_type = false) {
-        if (! is_object($url)) {
+    function put($url, $parameters = false, $content_type = false)
+    {
+        if (!is_object($url)) {
             $url = new SimpleUrl($url);
         }
         return $this->load($url, new SimplePutEncoding($parameters, $content_type));
@@ -360,8 +376,9 @@ class LightBrowser {
      *    @return string                              Content of page or false.
      *    @access public
      */
-    function delete($url, $parameters = false) {
-        if (! is_object($url)) {
+    function delete($url, $parameters = false)
+    {
+        if (!is_object($url)) {
             $url = new SimpleUrl($url);
         }
         return $this->load($url, new SimpleDeleteEncoding($parameters));
@@ -375,13 +392,12 @@ class LightBrowser {
      *                             else false.
      *    @access public
      */
-    function retry() {
+    function retry()
+    {
         $frames = $this->page->getFrameFocus();
         if (count($frames) > 0) {
             $this->loadFrame(
-                    $frames,
-                    $this->page->getUrl(),
-                    $this->page->getRequestData());
+                    $frames, $this->page->getUrl(), $this->page->getRequestData());
             return $this->page->getRaw();
         }
         if ($url = $this->history->getUrl()) {
@@ -400,12 +416,13 @@ class LightBrowser {
      *                        fetch succeeded
      *    @access public
      */
-    function back() {
-        if (! $this->history->back()) {
+    function back()
+    {
+        if (!$this->history->back()) {
             return false;
         }
         $content = $this->retry();
-        if (! $content) {
+        if (!$content) {
             $this->history->forward();
         }
         return $content;
@@ -420,12 +437,13 @@ class LightBrowser {
      *                        fetch succeeded
      *    @access public
      */
-    function forward() {
-        if (! $this->history->forward()) {
+    function forward()
+    {
+        if (!$this->history->forward()) {
             return false;
         }
         $content = $this->retry();
-        if (! $content) {
+        if (!$content) {
             $this->history->back();
         }
         return $content;
@@ -441,19 +459,17 @@ class LightBrowser {
      *                               failed.
      *    @access public
      */
-    function authenticate($username, $password) {
-        if (! $this->page->getRealm()) {
+    function authenticate($username, $password)
+    {
+        if (!$this->page->getRealm()) {
             return false;
         }
         $url = $this->page->getUrl();
-        if (! $url) {
+        if (!$url) {
             return false;
         }
         $this->user_agent->setIdentity(
-                $url->getHost(),
-                $this->page->getRealm(),
-                $username,
-                $password);
+                $url->getHost(), $this->page->getRealm(), $username, $password);
         return $this->retry();
     }
 
@@ -462,7 +478,8 @@ class LightBrowser {
      *    @return string        Error from last response.
      *    @access public
      */
-    function getTransportError() {
+    function getTransportError()
+    {
         return $this->page->getTransportError();
     }
 
@@ -471,7 +488,8 @@ class LightBrowser {
      *    @return string    MIME type as string; e.g. 'text/html'
      *    @access public
      */
-    function getMimeType() {
+    function getMimeType()
+    {
         return $this->page->getMimeType();
     }
 
@@ -480,7 +498,8 @@ class LightBrowser {
      *    @return integer    Last HTTP response code received.
      *    @access public
      */
-    function getResponseCode() {
+    function getResponseCode()
+    {
         return $this->page->getResponseCode();
     }
 
@@ -490,7 +509,8 @@ class LightBrowser {
      *    @return string    Description of challenge type.
      *    @access public
      */
-    function getAuthentication() {
+    function getAuthentication()
+    {
         return $this->page->getAuthentication();
     }
 
@@ -500,7 +520,8 @@ class LightBrowser {
      *    @return string    Name of security realm.
      *    @access public
      */
-    function getRealm() {
+    function getRealm()
+    {
         return $this->page->getRealm();
     }
 
@@ -510,7 +531,8 @@ class LightBrowser {
      *    @return string    Location of current page or frame as
      *                      a string.
      */
-    function getUrl() {
+    function getUrl()
+    {
         $url = $this->page->getUrl();
         return $url ? $url->asString() : false;
     }
@@ -519,17 +541,20 @@ class LightBrowser {
      *    Accessor for base URL of page if set via BASE tag
      *    @return string    base URL
      */
-    function getBaseUrl() {
+    function getBaseUrl()
+    {
         $url = $this->page->getBaseUrl();
         return $url ? $url->asString() : false;
     }
+
     /**
      *    Accessor for base URL of page if set via BASE tag
      *    @return string    base URL
      */
-    function getServerUrl() {
+    function getServerUrl()
+    {
         $aUrl = parse_url($this->getUrl());
-        return $aUrl['scheme'].'://'.$aUrl['host'];
+        return $aUrl['scheme'] . '://' . $aUrl['host'];
     }
 
     /**
@@ -537,7 +562,8 @@ class LightBrowser {
      *    @return string      Original text sent.
      *    @access public
      */
-    function getRequest() {
+    function getRequest()
+    {
         return $this->page->getRequest();
     }
 
@@ -546,8 +572,10 @@ class LightBrowser {
      *    @return string      Original text content of web page.
      *    @access public
      */
-    function getContent() {
+    function getContent()
+    {
         return $this->page->getRaw();
     }
 }
+
 ?>

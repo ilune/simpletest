@@ -1,8 +1,4 @@
 <?php
-if (defined('TESTING') == false
-        ||  !TESTING) {
-    print 'Forbidden'; exit;
-}
 /**
  *  Base include file for SimpleTest.
  *  @package    SimpleTest

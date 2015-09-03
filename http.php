@@ -1,4 +1,8 @@
 <?php
+if (defined('TESTING') == false
+        ||  !TESTING) {
+    print 'Forbidden'; exit;
+}
 /**
  *  base include file for SimpleTest
  *  @package    SimpleTest
@@ -48,8 +52,9 @@ class SimpleRoute {
      *    @access protected
      */
     protected function getRequestLine($method) {
-        return $method . ' ' . $this->url->getPath() .
+        $requestLine = $method . ' ' . $this->url->getPath() .
                 $this->url->getEncodedRequest() . ' HTTP/1.0';
+        return $requestLine;
     }
 
     /**
@@ -144,8 +149,14 @@ class SimpleProxyRoute extends SimpleRoute {
         $url = $this->getUrl();
         $scheme = $url->getScheme() ? $url->getScheme() : 'http';
         $port = $url->getPort() ? ':' . $url->getPort() : '';
-        return $method . ' ' . $scheme . '://' . $url->getHost() . $port .
-                $url->getPath() . $url->getEncodedRequest() . ' HTTP/1.0';
+        if ($scheme == 'http' || $port) {
+            $requestLine = $method . ' ' . $scheme . '://' . $url->getHost() . $port .
+                    $url->getPath() . $url->getEncodedRequest() . ' HTTP/1.1';
+        } else {
+            $requestLine = $method . ' ' . $scheme . '://' . $url->getHost() .':443'.
+                    $url->getPath() . $url->getEncodedRequest() . ' HTTP/1.1';
+        }
+        return $requestLine;
     }
 
     /**
@@ -157,7 +168,20 @@ class SimpleProxyRoute extends SimpleRoute {
     function getHostLine() {
         $host = 'Host: ' . $this->proxy->getHost();
         $port = $this->proxy->getPort() ? $this->proxy->getPort() : 8080;
-        return "$host:$port";
+        $hostLine =  "$host:$port";
+        return $hostLine;
+    }
+    function getHostLineV2() {
+        $url = $this->getUrl();
+        $scheme = $url->getScheme() ? $url->getScheme() : 'http';
+        if ($scheme =='http') {
+            $port = 80;
+        } else {
+            $port = 443;
+        }
+        $host = 'Host: ' . $url->getHost();
+        $hostLine =  "$host:$port";
+        return $hostLine ;
     }
 
     /**
@@ -177,13 +201,13 @@ class SimpleProxyRoute extends SimpleRoute {
             return $socket;
         }
         $socket->write($this->getRequestLine($method) . "\r\n");
-        $socket->write($this->getHostLine() . "\r\n");
+        $socket->write($this->getHostLineV2() . "\r\n");
         if ($this->username && $this->password) {
             $socket->write('Proxy-Authorization: Basic ' .
                     base64_encode($this->username . ':' . $this->password) .
                     "\r\n");
         }
-        $socket->write("Connection: close\r\n");
+        $socket->write("Connection: Close\r\n");
         return $socket;
     }
 }
@@ -235,9 +259,7 @@ class SimpleHttpRequest {
     /**
      *    Sends the headers.
      *    @param SimpleSocket $socket           Open socket.
-     *    @param string $method                 HTTP request method,
-     *                                          usually GET.
-     *    @param SimpleFormEncoding $encoding   Content to send with request.
+     *    @param SimpleEncoding $encoding   Content to send with request.
      *    @access private
      */
     protected function dispatchRequest($socket, $encoding) {
@@ -436,7 +458,7 @@ class SimpleHttpHeaders {
             $this->http_version = $matches[1];
             $this->response_code = $matches[2];
         }
-        if (preg_match('/Content-type:\s*(.*)/i', $header_line, $matches)) {
+        if (preg_match('/Content-type:*\s([^;]*)/i', $header_line, $matches)) {
             $this->mime_type = trim($matches[1]);
         }
         if (preg_match('/Location:\s*(.*)/i', $header_line, $matches)) {
@@ -579,7 +601,7 @@ class SimpleHttpResponse extends SimpleStickyError {
     /**
      *    Accessor for header block. The response is the
      *    combination of this and the content.
-     *    @return SimpleHeaders        Wrapped header block.
+     *    @return SimpleHttpHeaders        Wrapped header block.
      *    @access public
      */
     function getHeaders() {

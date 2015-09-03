@@ -1,5 +1,12 @@
 <?php
 /**
+ * Some security control
+ */
+if (defined('TESTING') == false
+        ||  !TESTING) {
+    print 'Forbidden'; exit;
+}
+/**
  *  Autorunner which runs all tests cases found in a file
  *  that includes this module.
  *  @package    SimpleTest

@@ -3,7 +3,7 @@
  *  Base include file for SimpleTest
  *  @package    SimpleTest
  *  @subpackage WebTester
- *  @version    $Id: user_agent.php 2051 2013-09-30 15:19:59Z pp11 $
+ *  @version    $Id: user_agent.php 2039 2011-11-30 18:16:15Z pp11 $
  */
 
 /**#@+
@@ -70,6 +70,14 @@ class SimpleUserAgent {
      */
     function addHeader($header) {
         $this->additional_headers[] = $header;
+    }
+    
+    /**
+     *    Reset additional Headers
+     *    @access public
+     */
+    function resetAdditionalHeader() {
+        $this->additional_headers = array();
     }
 
     /**
@@ -212,7 +220,7 @@ class SimpleUserAgent {
      *    @access public
      */
     function fetchResponse($url, $encoding) {
-        if (!in_array($encoding->getMethod(), array('POST', 'PUT'))) {
+        if ($encoding->getMethod() != 'POST') {
             $url->addRequestParameters($encoding);
             $encoding->clear();
         }
@@ -266,7 +274,8 @@ class SimpleUserAgent {
      */
     protected function fetch($url, $encoding) {
         $request = $this->createRequest($url, $encoding);
-        return $request->fetch($this->connection_timeout);
+        $response = $request->fetch($this->connection_timeout);
+        return $response;
     }
 
     /**
@@ -322,6 +331,18 @@ class SimpleUserAgent {
     protected function addAdditionalHeaders(&$request) {
         foreach ($this->additional_headers as $header) {
             $request->addHeaderLine($header);
+        }
+    }
+
+    /**
+     * return if a proxy is set
+     * @return boolean
+     */
+    public function usedProxy() {
+        if ($this->proxy) {
+            return true;
+        } else {
+            return false;
         }
     }
 }

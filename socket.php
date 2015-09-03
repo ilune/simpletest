@@ -199,6 +199,9 @@ class SimpleSocket extends SimpleStickyError {
      *    @access public
      */
     function write($message) {
+        if (defined('DEBUG_MODE') && DEBUG_MODE) {
+            //print $message.'<br />';
+        }
         if ($this->isError() || ! $this->isOpen()) {
             return false;
         }
@@ -252,7 +255,11 @@ class SimpleSocket extends SimpleStickyError {
      */
     function close() {
         $this->is_open = false;
-        return fclose($this->handle);
+        if (is_resource($this->handle)) {
+            return fclose($this->handle);
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -274,7 +281,11 @@ class SimpleSocket extends SimpleStickyError {
      *    @access protected
      */
     protected function openSocket($host, $port, &$error_number, &$error, $timeout) {
-        return @fsockopen($host, $port, $error_number, $error, $timeout);
+        $fp =  @fsockopen($host, $port, $error_number, $error, $timeout);
+        if (!$fp) {
+            throw new Exception('Unable to connect to '.$host);
+        }
+        return $fp;
     }
 }
 

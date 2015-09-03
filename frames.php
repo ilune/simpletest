@@ -327,6 +327,8 @@ class SimpleFrameset {
         return $this->frameset->getResponseCode();
     }
 
+
+
     /**
      *    Accessor for last Authentication type. Only valid
      *    straight after a challenge (401).
@@ -387,6 +389,15 @@ class SimpleFrameset {
     }
 
     /**
+     *    Accessor for metas.
+     *    @return array
+     *    @access public
+     */
+    function getMetas() {
+        return $this->frameset->getMetas();
+    }
+
+    /**
      *    Accessor for a list of all fixed links.
      *    @return array   List of urls as strings.
      *    @access public
@@ -398,6 +409,21 @@ class SimpleFrameset {
         $urls = array();
         foreach ($this->frames as $frame) {
             $urls = array_merge($urls, $frame->getUrls());
+        }
+        return array_values(array_unique($urls));
+    }
+    /**
+     *    Accessor for a list of images.
+     *    @return array   List of images
+     *    @access public
+     */
+    function getImages() {
+        if (is_integer($this->focus)) {
+            return $this->frames[$this->focus]->getImages();
+        }
+        $urls = array();
+        foreach ($this->frames as $frame) {
+            $urls = array_merge($urls, $frame->getImages());
         }
         return array_values(array_unique($urls));
     }

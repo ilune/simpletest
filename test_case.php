@@ -3,7 +3,7 @@
  *  Base include file for SimpleTest
  *  @package    SimpleTest
  *  @subpackage UnitTester
- *  @version    $Id: test_case.php 2050 2012-04-24 10:29:08Z lastcraft $
+ *  @version    $Id: test_case.php 2012 2011-04-29 08:57:00Z pp11 $
  */
 
 /**#@+
@@ -498,7 +498,7 @@ class TestSuite {
     function getLabel() {
         if (! $this->label) {
             return ($this->getSize() == 1) ?
-                    @get_class($this->test_cases[0]) : get_class($this);
+                    get_class($this->test_cases[0]) : get_class($this);
         } else {
             return $this->label;
         }

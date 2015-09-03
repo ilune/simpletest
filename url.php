@@ -417,6 +417,10 @@ class SimpleUrl {
         $this->target = $frame;
     }
 
+    function __toString()
+    {
+        return $this->asString();
+    }
     /**
      *    Renders the URL back into a string.
      *    @return string        URL in canonical form.
@@ -459,7 +463,7 @@ class SimpleUrl {
      *    @access public
      */
     function makeAbsolute($base) {
-        if (! is_object($base)) {
+        if (!($base instanceof SimpleUrl)) {
             $base = new SimpleUrl($base);
         }
         if ($this->getHost()) {

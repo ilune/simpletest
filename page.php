@@ -23,6 +23,7 @@ require_once(dirname(__FILE__) . '/selector.php');
  */
 class SimplePage {
     private $links = array();
+    private $images = array();
     private $title = false;
     private $last_widget;
     private $label;
@@ -65,6 +66,7 @@ class SimplePage {
         $this->url = $response->getUrl();
         $this->request_data = $response->getRequestData();
     }
+
 
     /**
      *    Sets up a missing response.
@@ -282,6 +284,14 @@ class SimplePage {
     }
 
     /**
+     *    Adds an image to the page.
+     *    @param SimpleAnchorTag $tag      Link to accept.
+     */
+    function addImage( $tag) {
+        $this->images[] = $tag;
+    }
+
+    /**
      *    Set the forms
      *    @param array $forms           An array of SimpleForm objects
      */
@@ -346,6 +356,21 @@ class SimplePage {
     }
 
     /**
+     *    Accessor for a list of all images.
+     *    @return array   List of urls with scheme of
+     *                    http or https and hostname.
+     *    @access public
+     */
+    function getImages() {
+        $all = array();
+        foreach ($this->images as $image) {
+            $url = $this->getUrlFromImage($image);
+            $all[] = $url->asString();
+        }
+        return $all;
+    }
+
+    /**
      *    Accessor for URLs by the link label. Label will match
      *    regardess of whitespace issues and case.
      *    @param string $label    Text of link.
@@ -356,6 +381,24 @@ class SimplePage {
         $matches = array();
         foreach ($this->links as $link) {
             if ($link->getText() == $label) {
+                $matches[] = $this->getUrlFromLink($link);
+            }
+        }
+        return $matches;
+    }
+
+    /**
+     *    Accessor for URLs by the link label. Label will match
+     *    regardess of whitespace issues and case.
+     *    @param string $label    Text of link.
+     *    @return array           List of links with that label.
+     *    @access public
+     */
+    function getUrlsByClass($class) {
+        $matches = array();
+        foreach ($this->links as $link) {
+            $classes = explode(' ', $link->getAttribute('class'));
+            if (in_array($class, $classes)) {
                 $matches[] = $this->getUrlFromLink($link);
             }
         }
@@ -383,11 +426,21 @@ class SimplePage {
      *    @return SimpleUrl            URL with frame target if any.
      *    @access private
      */
-    protected function getUrlFromLink($link) {
+    protected function getUrlFromLink( $link) {
         $url = $this->expandUrl($link->getHref());
         if ($link->getAttribute('target')) {
             $url->setTarget($link->getAttribute('target'));
         }
+        return $url;
+    }
+    /**
+     *    Converts a link tag into a target URL.
+     *    @param SimpleImage $link    Parsed image.
+     *    @return SimpleUrl            URL with frame target if any.
+     *    @access private
+     */
+    protected function getUrlFromImage( $link) {
+        $url = $this->expandUrl($link->getSrc());
         return $url;
     }
 
@@ -519,6 +572,36 @@ class SimplePage {
             }
         }
         return null;
+    }
+
+    function getMetas()
+    {
+            $result = false;
+            $contents = $this->getRaw();
+            if (isset($contents) && is_string($contents))
+            {
+                    $metaTags = null;
+                    preg_match_all('/<[\s]*meta[\s]*name="?' . '([^>"]*)"?[\s]*' . 'content="?([^>"]*)"?[\s]*[\/]?[\s]*>/si', $contents, $match);
+
+                    if (isset($match) && is_array($match) && count($match) == 3)
+                    {
+                            $originals = $match[0];
+                            $names = $match[1];
+                            $values = $match[2];
+
+                            if (count($originals) == count($names) && count($names) == count($values))
+                            {
+                                    $metaTags = array();
+
+                                    for ($i=0, $limiti=count($names); $i < $limiti; $i++)
+                                    {
+                                            $metaTags[$names[$i]] = $values[$i];
+                                    }
+                            }
+                    }
+            }
+
+            return $metaTags;
     }
 
     /**

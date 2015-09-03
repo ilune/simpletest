@@ -1,5 +1,12 @@
 <?php
 /**
+ * Some security control
+ */
+if (defined('BROWSER') == false
+        ||  !BROWSER) {
+    print 'Forbidden'; exit;
+}
+/**
  *  Base include file for SimpleTest
  *  @package    SimpleTest
  *  @subpackage WebTester
@@ -18,6 +25,7 @@ require_once(dirname(__FILE__) . '/tidy_parser.php');
 require_once(dirname(__FILE__) . '/selector.php');
 require_once(dirname(__FILE__) . '/frames.php');
 require_once(dirname(__FILE__) . '/user_agent.php');
+require_once(dirname(__FILE__) . '/SimpleBrowserHistory.php');
 if (! SimpleTest::getParsers()) {
     SimpleTest::setParsers(array(new SimpleTidyPageBuilder(), new SimplePHPPageBuilder()));
     //SimpleTest::setParsers(array(new SimplePHPPageBuilder()));
@@ -29,125 +37,6 @@ if (! defined('DEFAULT_MAX_NESTED_FRAMES')) {
 }
 
 /**
- *    Browser history list.
- *    @package SimpleTest
- *    @subpackage WebTester
- */
-class SimpleBrowserHistory {
-    private $sequence = array();
-    private $position = -1;
-
-    /**
-     *    Test for no entries yet.
-     *    @return boolean        True if empty.
-     *    @access private
-     */
-    protected function isEmpty() {
-        return ($this->position == -1);
-    }
-
-    /**
-     *    Test for being at the beginning.
-     *    @return boolean        True if first.
-     *    @access private
-     */
-    protected function atBeginning() {
-        return ($this->position == 0) && ! $this->isEmpty();
-    }
-
-    /**
-     *    Test for being at the last entry.
-     *    @return boolean        True if last.
-     *    @access private
-     */
-    protected function atEnd() {
-        return ($this->position + 1 >= count($this->sequence)) && ! $this->isEmpty();
-    }
-
-    /**
-     *    Adds a successfully fetched page to the history.
-     *    @param SimpleUrl $url                 URL of fetch.
-     *    @param SimpleEncoding $parameters     Any post data with the fetch.
-     *    @access public
-     */
-    function recordEntry($url, $parameters) {
-        $this->dropFuture();
-        array_push(
-                $this->sequence,
-                array('url' => $url, 'parameters' => $parameters));
-        $this->position++;
-    }
-
-    /**
-     *    Last fully qualified URL for current history
-     *    position.
-     *    @return SimpleUrl        URL for this position.
-     *    @access public
-     */
-    function getUrl() {
-        if ($this->isEmpty()) {
-            return false;
-        }
-        return $this->sequence[$this->position]['url'];
-    }
-
-    /**
-     *    Parameters of last fetch from current history
-     *    position.
-     *    @return SimpleFormEncoding    Post parameters.
-     *    @access public
-     */
-    function getParameters() {
-        if ($this->isEmpty()) {
-            return false;
-        }
-        return $this->sequence[$this->position]['parameters'];
-    }
-
-    /**
-     *    Step back one place in the history. Stops at
-     *    the first page.
-     *    @return boolean     True if any previous entries.
-     *    @access public
-     */
-    function back() {
-        if ($this->isEmpty() || $this->atBeginning()) {
-            return false;
-        }
-        $this->position--;
-        return true;
-    }
-
-    /**
-     *    Step forward one place. If already at the
-     *    latest entry then nothing will happen.
-     *    @return boolean     True if any future entries.
-     *    @access public
-     */
-    function forward() {
-        if ($this->isEmpty() || $this->atEnd()) {
-            return false;
-        }
-        $this->position++;
-        return true;
-    }
-
-    /**
-     *    Ditches all future entries beyond the current
-     *    point.
-     *    @access private
-     */
-    protected function dropFuture() {
-        if ($this->isEmpty()) {
-            return;
-        }
-        while (! $this->atEnd()) {
-            array_pop($this->sequence);
-        }
-    }
-}
-
-/**
  *    Simulated web browser. This is an aggregate of
  *    the user agent, the HTML parsing, request history
  *    and the last header set.
@@ -155,12 +44,18 @@ class SimpleBrowserHistory {
  *    @subpackage WebTester
  */
 class SimpleBrowser {
+    /**
+     * @var SimpleUserAgent
+     */
     private $user_agent;
+    /**
+     * @var SimplePage
+     */
     private $page;
     private $history;
     private $ignore_frames;
     private $maximum_nested_frames;
-    private $parser;
+    public $parser;
 
     /**
      *    Starts with a fresh browser with no
@@ -187,7 +82,8 @@ class SimpleBrowser {
      *    @access protected
      */
     protected function createUserAgent() {
-        return new SimpleUserAgent();
+		$simple = new SimpleUserAgent();;
+        return $simple;
     }
 
     /**
@@ -304,6 +200,9 @@ class SimpleBrowser {
         if ($response->isError()) {
             return new SimplePage($response);
         }
+        if ($response->getHeaders()->getMimeType() !=='text/html' ) {
+            return new SimplePage($response);
+        }
         return $this->parse($response, $depth);
     }
 
@@ -373,6 +272,14 @@ class SimpleBrowser {
      */
     function addHeader($header) {
         $this->user_agent->addHeader($header);
+    }
+
+    /**
+     *    Reset headers
+     *    @access public
+     */
+    function resetAdditionalHeader() {
+        $this->user_agent->resetAdditionalHeader();
     }
 
     /**
@@ -475,7 +382,7 @@ class SimpleBrowser {
      *    @access public
      */
     function head($url, $parameters = false) {
-        if (! is_object($url)) {
+        if (!($url instanceof SimpleUrl)) {
             $url = new SimpleUrl($url);
         }
         if ($this->getUrl()) {
@@ -495,7 +402,10 @@ class SimpleBrowser {
      *    @access public
      */
     function get($url, $parameters = false) {
-        if (! is_object($url)) {
+        if (substr($url,0,5) == 'https' && $this->user_agent->usedProxy() ) {
+            throw new Exception('HTTPS doesn\'t work with proxy');
+        }
+        if (!($url instanceof SimpleUrl)) {
             $url = new SimpleUrl($url);
         }
         if ($this->getUrl()) {
@@ -759,6 +669,14 @@ class SimpleBrowser {
         $url = $this->page->getBaseUrl();
         return $url ? $url->asString() : false;
     }
+    /**
+     *    Accessor for base URL of page if set via BASE tag
+     *    @return string    base URL
+     */
+    function getServerUrl() {
+        $aUrl = parse_url($this->getUrl());
+        return $aUrl['scheme'].'://'.$aUrl['host'];
+    }
 
     /**
      *    Accessor for raw bytes sent down the wire.
@@ -787,6 +705,10 @@ class SimpleBrowser {
         return $this->page->getRaw();
     }
 
+    function getMetas() {
+        return $this->page->getMetas();
+    }
+
     /**
      *    Accessor for plain text version of the page.
      *    @return string      Normalised text representation.
@@ -813,6 +735,16 @@ class SimpleBrowser {
      */
     function getUrls() {
         return $this->page->getUrls();
+    }
+
+    /**
+     *    Accessor for a list of all images  in current page.
+     *    @return array   List of urls with scheme of
+     *                    http or https and hostname.
+     *    @access public
+     */
+    function getImages() {
+        return $this->page->getImages();
     }
 
     /**
@@ -1097,6 +1029,25 @@ class SimpleBrowser {
      */
     function getLinkById($id) {
         return $this->page->getUrlById($id);
+    }
+
+    /**
+     *    Finds links with class.
+     *    @param string $class    class value.
+     *    @return array/boolean   URLs on success.
+     *    @access public
+     */
+    function getLinks() {
+        return $this->page->getUrls();
+    }
+    /**
+     *    Finds links with class.
+     *    @param string $class    class value.
+     *    @return array/boolean   URLs on success.
+     *    @access public
+     */
+    function getLinksByClass($class) {
+        return $this->page->getUrlsByClass($class);
     }
 
     /**

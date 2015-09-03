@@ -33,6 +33,7 @@ class SimpleTagBuilder {
     function createTag($name, $attributes) {
         static $map = array(
                 'a' => 'SimpleAnchorTag',
+                'img' => 'SimpleImageTag',
                 'title' => 'SimpleTitleTag',
                 'base' => 'SimpleBaseTag',
                 'button' => 'SimpleButtonTag',
@@ -326,6 +327,44 @@ class SimpleAnchorTag extends SimpleTag {
             $url = '';
         }
         return $url;
+    }
+}
+
+/**
+ *    img.
+ *    @package SimpleTest
+ *    @subpackage WebTester
+ */
+class SimpleImageTag extends SimpleTag {
+
+    /**
+     *    Starts with a named tag with attributes only.
+     *    @param hash $attributes    Attribute names and
+     *                               string values.
+     */
+    function __construct($attributes) {
+        parent::__construct('img', $attributes);
+    }
+
+    /**
+     *    Accessor for URL as string.
+     *    @return string    Coerced as string.
+     *    @access public
+     */
+    function getSrc() {
+        $url = $this->getAttribute('src');
+        if (is_bool($url)) {
+            $url = '';
+        }
+        return $url;
+    }
+    /**
+     *    Tag contains no end element.
+     *    @return boolean        False.
+     *    @access public
+     */
+    function expectEndTag() {
+        return false;
     }
 }
 

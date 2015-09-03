@@ -1,4 +1,8 @@
 <?php
+if (defined('TESTING') == false
+        ||  !TESTING) {
+    print 'Forbidden'; exit;
+}
 /**
  *  Global state for SimpleTest and kicker script in future versions.
  *  @package    SimpleTest

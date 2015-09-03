@@ -1,0 +1,41 @@
+{
+    "name": "ilune/simpletest",
+    "description": "It's a framework for unit testing, web site testing and mock objects for PHP 5.0.5+",
+    "homepage": "https://github.com/Ilune/Stringtools",
+    "keywords": ["unit", "testing"],
+    "license": "LGPL",
+    "authors": [
+        {
+            "name": "Jérôme",
+            "homepage": "https://github.com/Ilune"
+        },
+        {
+            "name": "Marcus Baker",
+            "homepage": "http://simpletest.org"
+        },
+        {
+            "name": "Jason Sweat",
+            "homepage": "http://simpletest.org"
+        },
+        {
+            "name": "Travis Swicegood",
+            "homepage": "http://simpletest.org"
+        },
+        {
+            "name": "Perrick Penet",
+            "homepage": "http://simpletest.org"
+        },
+        {
+            "name": "Edward Z. Yang.",
+            "homepage": "http://simpletest.org"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Simpletest\\": "/"
+        }
+    }
+}

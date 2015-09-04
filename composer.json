@@ -1,35 +1,63 @@
 {
     "name": "ilune/simpletest",
     "description": "It's a framework for unit testing, web site testing and mock objects for PHP 5.0.5+",
-    "homepage": "https://github.com/Ilune/Stringtools",
-    "keywords": ["unit", "testing"],
+    "homepage": "http://simpletest.org/",
+    "keywords": [
+        "unit", 
+        "testing",
+       "simpletest",
+        "unit-test",
+        "code-coverage",
+        "selenium"
+    ],
     "license": "LGPL",
     "authors": [
         {
             "name": "Jérôme",
-            "homepage": "https://github.com/Ilune"
+            "homepage": "https://github.com/Ilune",
+            "email": "jerome@ilune.fr",
+            "role": "ilune/simpletest developer"
         },
         {
             "name": "Marcus Baker",
-            "homepage": "http://simpletest.org"
+            "homepage": "http://simpletest.org",
+            "email": "marcus@lastcraft.com",
+            "role": "Original project lead"
         },
         {
             "name": "Jason Sweat",
-            "homepage": "http://simpletest.org"
+            "homepage": "http://simpletest.org",
+            "role": "Original developer"
         },
         {
             "name": "Travis Swicegood",
-            "homepage": "http://simpletest.org"
+            "homepage": "http://simpletest.org",
+            "role": "Original developer"
         },
         {
             "name": "Perrick Penet",
-            "homepage": "http://simpletest.org"
+            "homepage": "http://simpletest.org",
+            "role": "Original developer"
         },
         {
             "name": "Edward Z. Yang.",
-            "homepage": "http://simpletest.org"
+            "homepage": "http://simpletest.org",
+            "role": "Original developer"
+        },
+        {
+            "name": "Lachlan Donald",
+            "email": "lachlan@ljd.cc"
+        },
+        {
+            "name": "Lars Vierbergen",
+            "email": "vierbergenlars@gmail.com"
         }
     ],
+    "replace": {
+        "vierbergenlars/simpletest": "self.version",
+        "lastcraft/simpletest": "self.version",
+        "simpletest/simpletest": "self.version"
+    },
     "require": {
         "php": ">=5.4.0"
     },

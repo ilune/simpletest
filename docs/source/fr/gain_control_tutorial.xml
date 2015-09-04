@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
-<!-- $Id: gain_control_tutorial.xml 2022 2011-05-24 20:18:07Z pp11 $ -->
+<!-- $Id$ -->
 <page title="Prendre le contrôle des tests" here="Prendre le contrôle des tests">
     <synchronisation lang="en" version="1867" date="24/05/2011" maintainer="pp11" />
     <long_title>Tutorial de test unitaire en PHP  - Isoler les variables pendant le test</long_title>

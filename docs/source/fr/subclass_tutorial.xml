@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
-<!-- $Id: subclass_tutorial.xml 2031 2011-06-08 20:59:02Z pp11 $ -->
+<!-- $Id$ -->
 <page title="Sous classer un scénario de test unitaire" here="Sous classer un scénario de test unitaire">
     <synchronisation lang="en" version="1878" date="08/06/2011" maintainer="pp11" />
     <long_title>Tutorial de test unitaire en PHP - Sous classer un scénario de test</long_title>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
-<!-- $Id: group_test_documentation.xml 2022 2011-05-24 20:18:07Z pp11 $ -->
+<!-- $Id$ -->
 <page title="Documentation sur le groupement des tests" here="Les groupes de tests">
     <synchronisation lang="en" version="2007" date="24/05/2011" maintainer="pp11" />
     <long_title>Documentation SimpleTest : Grouper des tests</long_title>

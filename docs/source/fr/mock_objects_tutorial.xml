@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
-<!-- $Id: mock_objects_tutorial.xml 2027 2011-06-08 20:20:43Z pp11 $ -->
+<!-- $Id$ -->
 <page title="Objets fantaisie" here="Utiliser des objets fantaisie">
     <synchronisation lang="en" version="1979" date="08/06/2011" maintainer="pp11" />
     <long_title>tutorial sur les tests unitaires en PHP - Utiliser les objets fantaisie en PHP</long_title>

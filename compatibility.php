@@ -2,49 +2,14 @@
 /**
  *  base include file for SimpleTest
  *  @package    SimpleTest
- *  @version    $Id: compatibility.php 1900 2009-07-29 11:44:37Z lastcraft $
  */
 
 /**
- *  Static methods for compatibility between different
- *  PHP versions.
+ *  Static methods for compatibility between different PHP versions.
  *  @package    SimpleTest
  */
-class SimpleTestCompatibility {
-
-    /**
-     *    Creates a copy whether in PHP5 or PHP4.
-     *    @param object $object     Thing to copy.
-     *    @return object            A copy.
-     *    @access public
-     */
-    static function copy($object) {
-        if (version_compare(phpversion(), '5') >= 0) {
-            eval('$copy = clone $object;');
-            return $copy;
-        }
-        return $object;
-    }
-
-    /**
-     *    Identity test. Drops back to equality + types for PHP5
-     *    objects as the === operator counts as the
-     *    stronger reference constraint.
-     *    @param mixed $first    Test subject.
-     *    @param mixed $second   Comparison object.
-     *    @return boolean        True if identical.
-     *    @access public
-     */
-    static function isIdentical($first, $second) {
-        if (version_compare(phpversion(), '5') >= 0) {
-            return SimpleTestCompatibility::isIdenticalType($first, $second);
-        }
-        if ($first != $second) {
-            return false;
-        }
-        return ($first === $second);
-    }
-
+class SimpleTestCompatibility
+{
     /**
      *    Recursive type test.
      *    @param mixed $first    Test subject.
@@ -80,7 +45,8 @@ class SimpleTestCompatibility {
      *    @return boolean        True if identical.
      *    @access private
      */
-    protected static function isArrayOfIdenticalTypes($first, $second) {
+    protected static function isArrayOfIdenticalTypes($first, $second)
+    {
         if (array_keys($first) != array_keys($second)) {
             return false;
         }
@@ -107,14 +73,14 @@ class SimpleTestCompatibility {
             return ($first === $second);
         }
         if (is_object($first) && is_object($second)) {
-            $id = uniqid("test");
+            $id = uniqid(mt_rand());
             $first->$id = true;
             $is_ref = isset($second->$id);
             unset($first->$id);
             return $is_ref;
         }
         $temp = $first;
-        $first = uniqid("test");
+        $first = uniqid(mt_rand());
         $is_ref = ($first === $second);
         $first = $temp;
         return $is_ref;
@@ -163,4 +129,3 @@ class SimpleTestCompatibility {
         }
     }
 }
-?>

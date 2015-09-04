@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- $Id: heartbeat.xml 2034 2011-06-08 21:51:35Z pp11 $ -->
+<!-- $Id$ -->
 <page title="Colpo di cuore" here="Colpo di cuore">
     <synchronisation lang="en" version="0" date="08/06/2011" maintainer="arialdomartini" />
     <long_title>Heartbeat : how is SimpleTest doing ?</long_title>

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- $Id: subclass_tutorial.xml 2034 2011-06-08 21:51:35Z pp11 $ -->
+<!-- $Id$ -->
 <page title="Il riutilizzo dei casi" here="Tutorial: il riutilizzo dei casi">
     <synchronisation lang="en" version="0" date="08/06/2011" maintainer="arialdomartini" />
     <long_title>PHP unit testing tutorial - Subclassing a test case</long_title>

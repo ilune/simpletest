@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- $Id: coding_standards.xml 2034 2011-06-08 21:51:35Z pp11 $ -->
+<!-- $Id$ -->
 <page title="I standardi per il coding e il formatting" here="I standardi per il coding">
     <synchronisation lang="en" version="0" date="08/06/2011" maintainer="arialdomartini" />
     <long_title>Coding Standards within SimpleTest</long_title>

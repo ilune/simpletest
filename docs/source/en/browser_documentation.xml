@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- $Id: browser_documentation.xml 2015 2011-04-29 16:28:25Z pp11 $ -->
+<!-- $Id$ -->
 <page title="PHP Scriptable Web Browser" here="Scriptable browser">
     <long_title>SimpleTest documentation for the scriptable web browser component</long_title>
     <content>

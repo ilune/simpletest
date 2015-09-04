@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
-<!-- $Id: expectation_documentation.xml 2015 2011-04-29 16:28:25Z pp11 $ -->
+<!-- $Id$ -->
 <page title="Documentation sur les attentes" here="Les attentes">
     <synchronisation lang="en" version="1952" date="29/04/2011" maintainer="pp11" />
     <long_title>Documentation SimpleTest : étendre le testeur unitaire avec des classes d'attentes supplémentaires</long_title>

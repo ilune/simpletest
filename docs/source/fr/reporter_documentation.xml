@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
-<!-- $Id: reporter_documentation.xml 2029 2011-06-08 20:53:03Z pp11 $ -->
+<!-- $Id$ -->
 <page title="Documentation sur le rapporteur de test" here="Le rapporteur de test">
     <synchronisation lang="en" version="2028" date="08/06/2011" maintainer="pp11" />
     <long_title>Documentation SimpleTest : le rapporteur de test</long_title>

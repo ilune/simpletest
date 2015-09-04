@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- $Id: writing_extensions.xml 2034 2011-06-08 21:51:35Z pp11 $ -->
+<!-- $Id$ -->
 <page title="Scrivere estensioni per SimpleTest" here="Scrivere estensioni">
     <synchronisation lang="en" version="0" date="08/06/2011" maintainer="arialdomartini" />
     <long_title>Writing an extension for SimpleTest</long_title>

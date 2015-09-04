@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- $Id: coding_standards.xml 2034 2011-06-08 21:51:35Z pp11 $ -->
+<!-- $Id$ -->
 <page title="Coding Standards and Formatting" here="Coding Standards">
     <long_title>Coding Standards within SimpleTest</long_title>
     <content>

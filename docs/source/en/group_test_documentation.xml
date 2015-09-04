@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- $Id: group_test_documentation.xml 2007 2010-12-17 02:55:54Z jsweat $ -->
+<!-- $Id$ -->
 <page title="Test suite documentation" here="Group tests">
     <long_title>SimpleTest for PHP test suites</long_title>
     <content>

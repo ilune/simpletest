@@ -18,7 +18,7 @@ if (! defined('DEFAULT_MAX_REDIRECTS')) {
     define('DEFAULT_MAX_REDIRECTS', 3);
 }
 if (! defined('DEFAULT_CONNECTION_TIMEOUT')) {
-    define('DEFAULT_CONNECTION_TIMEOUT', 15);
+    define('DEFAULT_CONNECTION_TIMEOUT', ini_get("default_socket_timeout"));
 }
 
 /**

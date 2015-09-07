@@ -10,7 +10,7 @@
  *  include other SimpleTest class files
  */
 require_once(dirname(__FILE__) . '/page.php');
-require_once(dirname(__FILE__) . '/user_agent.php');
+require_once(dirname(__FILE__) . '/SimpleUserAgent.php');
 /**#@-*/
 
 /**

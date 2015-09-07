@@ -16,7 +16,7 @@ require_once(dirname(__FILE__) . '/php_parser.php');
 require_once(dirname(__FILE__) . '/tidy_parser.php');
 require_once(dirname(__FILE__) . '/selector.php');
 require_once(dirname(__FILE__) . '/frames.php');
-require_once(dirname(__FILE__) . '/user_agent.php');
+require_once(dirname(__FILE__) . '/SimpleUserAgent.php');
 require_once(dirname(__FILE__) . '/SimpleBrowserHistory.php');
 if (!SimpleTest::getParsers()) {
     SimpleTest::setParsers(array(new SimpleTidyPageBuilder(), new SimplePHPPageBuilder()));

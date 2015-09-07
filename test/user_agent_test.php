@@ -1,7 +1,7 @@
 <?php
 // $Id: user_agent_test.php 1788 2008-04-27 11:01:59Z pp11 $
 require_once(dirname(__FILE__) . '/../autorun.php');
-require_once(dirname(__FILE__) . '/../user_agent.php');
+require_once(dirname(__FILE__) . '/../SimpleUserAgent.php');
 require_once(dirname(__FILE__) . '/../authentication.php');
 require_once(dirname(__FILE__) . '/../http.php');
 require_once(dirname(__FILE__) . '/../encoding.php');

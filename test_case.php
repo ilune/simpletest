@@ -428,7 +428,8 @@ class SimpleFileLoader {
      *                               cases that shouldn't be ignored.
      *    @access public
      */
-    function selectRunnableTests($candidates) {
+    public function selectRunnableTests($candidates)
+    {
         $classes = array();
         foreach ($candidates as $class) {
             if (TestSuite::getBaseTestCase($class)) {
@@ -451,7 +452,8 @@ class SimpleFileLoader {
      *                               test cases.
      *    @access public
      */
-    function createSuiteFromClasses($title, $classes) {
+    public function createSuiteFromClasses($title, $classes)
+    {
         if (count($classes) == 0) {
             $suite = new BadTestSuite($title, "No runnable test cases in [$title]");
             return $suite;
@@ -474,7 +476,8 @@ class SimpleFileLoader {
  *    @package      SimpleTest
  *    @subpackage   UnitTester
  */
-class TestSuite {
+class TestSuite
+{
     private $label;
     private $test_cases;
 
@@ -484,7 +487,8 @@ class TestSuite {
      *                            of the test.
      *    @access public
      */
-    function TestSuite($label = false) {
+    public function __construct($label = false)
+    {
         $this->label = $label;
         $this->test_cases = array();
     }
@@ -495,7 +499,8 @@ class TestSuite {
      *    @return string           Name of the test.
      *    @access public
      */
-    function getLabel() {
+    public function getLabel()
+    {
         if (! $this->label) {
             return ($this->getSize() == 1) ?
                     get_class($this->test_cases[0]) : get_class($this);

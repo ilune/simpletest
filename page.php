@@ -614,34 +614,31 @@ class SimplePage
         return null;
     }
 
-    function getMetas()
+    /**
+     * Parse page content to found metas tags
+     * @return array
+     */
+    public function getMetas()
     {
-            $result = false;
-            $contents = $this->getRaw();
-            if (isset($contents) && is_string($contents))
-            {
-                    $metaTags = null;
-                    preg_match_all('/<[\s]*meta[\s]*name="?' . '([^>"]*)"?[\s]*' . 'content="?([^>"]*)"?[\s]*[\/]?[\s]*>/si', $contents, $match);
+        $result = false;
+        $contents = $this->getRaw();
+        $metaTags = array();
+        if (isset($contents) && is_string($contents)) {
+            preg_match_all('/<[\s]*meta[\s]*name="?' . '([^>"]*)"?[\s]*' . 'content="?([^>"]*)"?[\s]*[\/]?[\s]*>/si', $contents, $match);
 
-                    if (isset($match) && is_array($match) && count($match) == 3)
-                    {
-                            $originals = $match[0];
-                            $names = $match[1];
-                            $values = $match[2];
+            if (isset($match) && is_array($match) && count($match) == 3) {
+                $originals = $match[0];
+                $names = $match[1];
+                $values = $match[2];
 
-                            if (count($originals) == count($names) && count($names) == count($values))
-                            {
-                                    $metaTags = array();
-
-                                    for ($i=0, $limiti=count($names); $i < $limiti; $i++)
-                                    {
-                                            $metaTags[$names[$i]] = $values[$i];
-                                    }
-                            }
+                if (count($originals) == count($names) && count($names) == count($values)) {
+                    for ($i = 0, $limiti = count($names); $i < $limiti; $i++) {
+                        $metaTags[$names[$i]] = $values[$i];
                     }
+                }
             }
-
-            return $metaTags;
+        }
+        return $metaTags;
     }
 
     /**

@@ -36,7 +36,7 @@ class SimpleCookie {
      *    @param string $expiry          Expiry date as string.
      *    @param boolean $is_secure      Currently ignored.
      */
-    function __construct($name, $value = false, $path = false, $expiry = false, $is_secure = false) {
+    function __construct($name=false, $value = false, $path = false, $expiry = false, $is_secure = false) {
         $this->host = false;
         $this->name = $name;
         $this->value = $value;
@@ -48,6 +48,22 @@ class SimpleCookie {
             $this->expiry = $expiry;
         }
         $this->is_secure = $is_secure;
+    }
+    
+    function __toString() {
+        //var_dump($this);
+        $a = [];
+        foreach ($this as $key=>$value) {
+            $a[$key] = $value;
+        }
+        return json_encode($a);
+    }
+    
+    function wakeUp($json) {
+        $a = json_decode($json,true);
+        foreach ($a as $key => $value) {
+            $this->$key = $value;
+        }
     }
 
     /**
@@ -234,6 +250,35 @@ class SimpleCookieJar {
      */
     function __construct() {
         $this->cookies = array();
+    }
+    
+    function saveCookies($file)
+    {
+        $a = [];
+        foreach($this->cookies as $cookie) {
+             $a[] = $cookie->__toString();
+        }
+        file_put_contents($file, json_encode($a));
+    }
+    
+    public function restoreCookies($file) {
+        $json = file_get_contents($file);
+        $a = json_decode($json);
+        $this->cookies = [];
+        foreach($a as $jsonCookie) {
+            $cookie = new SimpleCookie();
+            $cookie->wakeUp($jsonCookie);
+            $this->cookies[] = $cookie;
+        }
+    }
+    
+    public function dumpCookies()
+    {
+        $a = [];
+        foreach($this->cookies as $cookie) {
+             $a[] = $cookie->__toString();
+        }
+        var_dump($a);
     }
 
     /**

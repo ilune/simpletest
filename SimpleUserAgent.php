@@ -46,6 +46,19 @@ class SimpleUserAgent {
         $this->cookie_jar = new SimpleCookieJar();
         $this->authenticator = new SimpleAuthenticator();
     }
+    
+    function saveCookies($file)
+    {
+        $this->cookie_jar->saveCookies($file);
+    }
+    public function restoreCookies($file) {
+        $this->cookie_jar->restoreCookies($file);
+    }
+    
+    public function dumpCookies()
+    {
+        $this->cookie_jar->dumpCookies();
+    }
 
     /**
      *    Removes expired and temporary cookies as if

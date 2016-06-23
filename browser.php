@@ -81,6 +81,20 @@ class SimpleBrowser
     {
         return new SimpleUserAgent();
     }
+    
+    public function saveCookies($file)
+    {
+        $this->user_agent->saveCookies($file);
+    }
+    
+    public function restoreCookies($file) {
+        $this->user_agent->restoreCookies($file);
+    }
+    
+    public function dumpCookies()
+    {
+        $this->user_agent->dumpCookies();
+    }
 
     /**
      *    Creates a new empty history list.
@@ -284,7 +298,7 @@ class SimpleBrowser
     {
         $this->user_agent->addHeader($header);
     }
-
+    
     /**
      *    Reset headers
      *    @access public
